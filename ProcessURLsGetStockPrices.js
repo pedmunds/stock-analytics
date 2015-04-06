@@ -7,12 +7,13 @@ output parsed details to shares.txt file for database import
 */
 
 // enter stat and end dates for historic data
-var startdate= '1-Apr-15'
+var startdate= '1-Jan-15'
 var enddate='' //blank = today
 var shareArray = [];
 var epic = '';
 
 fs = require('fs')
+fs.appendFile('shares.txt', 'EPIC,DATE,CLOSE\n', function (err) {});
 fs.readFile('epicsfile.txt', 'utf8', function (err,data) {
   if (err) {
     return console.log(err);
@@ -57,7 +58,6 @@ var parsecsv = function(allText) {
 	var fs = require('fs');
     //console.log(allText);
     var allTextLines = allText.split(/\r\n|\n/);
-    fs.appendFile('shares.txt', 'EPIC,DATE,CLOSE\n', function (err) {});
 
     for (var i=1; i<allTextLines.length-1; i++) {
         var data = allTextLines[i].split(',');
