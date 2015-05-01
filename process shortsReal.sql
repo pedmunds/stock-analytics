@@ -40,12 +40,8 @@ set @short = 0
 
 end
 
--- process value change shorts
+-- process value change
 
-declare @mydate datetime,
-@epic varchar(20),
-@id int,
-@short float
 set @Epic = ''
 
 While (Select Count(*) From shares Where percentChangeshortReal is NULL) > 0
@@ -62,50 +58,4 @@ LEFT JOIN
 WHERE [current].epic = @Epic
 
 End
-
--- process value change price
-
-update shares
-set percentChangePrice = NULL
-
-Declare @Date datetime,
-		@Epic nchar(10),
-		@short float
-
-While (Select Count(*) From shares Where percentChangePrice is NULL) > 0
-Begin
-    Select Top 1 @Epic = Epic  From shares Where percentChangePrice is NULL
-
-update [current]
-Set percentChangePrice = cast((ISNULL([next].[close], [current].[close]) - [current].[close]) as decimal(18,2)) 
-FROM
-   shares       AS [current]
-LEFT JOIN
-   shares       AS [next]
-      ON [next].id = (SELECT MIN(id) FROM shares WHERE id > [current].id and epic = @Epic)
-WHERE [current].epic = @Epic
-
-End
-
-
-Declare @Epic nchar(10),
-		@CulminativeChangePrice float
-
-While (Select Count(*) From shares Where CulminativeChangePrice is NULL) > 0
-Begin
-    Select Top 1 @Epic = Epic  From shares Where CulminativeChangePrice is NULL
-
-set @CulminativeChangePrice = 0
-
-UPDATE shares 
-SET @CulminativeChangePrice = CulminativeChangePrice = @CulminativeChangePrice + PercentChangePrice 
-FROM shares
-where epic = @Epic
-
-End
-
--- test
-select * from shares
-where epic = 'SKY'
-
 
