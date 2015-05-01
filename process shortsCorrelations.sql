@@ -14,12 +14,6 @@ select epic
 from shares
 group by epic
 
-update u
-set u.assid = s.assid
-from ud u
-    inner join sale s on
-        u.id = s.udid
-
 update a
 set a.Correlation = b.Correlation
 from

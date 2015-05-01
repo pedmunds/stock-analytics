@@ -17,17 +17,18 @@ declare @t TABLE (epic varchar(10), shortPrice float,
 					)
 
 -- shares that where shorted with max short and then lowest later price
-insert into @t (epic, shortPrice, lowPrice, firstshort, diff, maxshort, shortDate, shortid, shortreal)
+insert into @t (epic, shortPrice, lowPrice, firstshort, diff, maxshort, shortDate, shortid, shortreal, CulminativeChangePrice)
 select b.epic, max(a.[close]) as shortPrice, min(b.[close]) as lowPrice, max(a.short) as firstshort,
 cast(((max(a.[close])- min(b.[close]))/max(a.[close]))*100 as decimal(18,2)) as diff,
 cast(max(MaxShort) as decimal(18,2)) as maxshort,
 max(a.date) as shortDate,
 max(a.id) as shortid,
-max(a.shortreal) as shortreal
+max(a.shortreal) as shortreal,
+cast(max(a.CulminativeChangePrice) as decimal(18,2)) as CulminativeChangePrice
 --,cast(max(MaxShort) as decimal(18,2))/cast(((max(a.[close])- min(b.[close]))/max(a.[close]))*100 as decimal(18,2)) as ratio
 from shares b,
 (
-select id, date, [close], epic, short, shortreal from shares 
+select id, date, [close], epic, short, shortreal, CulminativeChangePrice from shares 
 where id in
 (
 select min(id) -- orderby by date so like min(date)
