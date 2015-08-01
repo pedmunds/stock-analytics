@@ -17,6 +17,7 @@ This code contains:
 # Installing
 
 You need to install scraperjs (npm install scraperjs)
+download this from https://github.com/ruipgil/scraperjs
 Copy the process*.js scripts to the scraperjs folder under nodejs modules
 Install MS SQL Express (free) and restore the database
 
